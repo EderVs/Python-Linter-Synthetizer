@@ -1,8 +1,9 @@
 import re
 from default_functions import *
 
-VARS_PATTERN = re.compile(r"_[a-zA-Z0-9_]*|[a-zA-Z][_a-zA-Z0-9]*")
-
+VARS_PATTERN = re.compile(r"[_a-zA-Z][_a-zA-Z0-9]*")
+FUNS_PATTERN = re.compile(r"[a-z][a-zA-Z0-9]*\(.*\)")
+ARGS_PATTERN = re.compile(r"\(.*\)")
 PYTHON_KEYWORDS = { "False"    : 0,
 					"True"     : 0,
 					"class"    : 0,
@@ -138,6 +139,67 @@ def eval_composition(composition, input):
 
 	return eval
 
+def find_variables(string):
+	""" 
+		Recursive function that searches the variables in a given string.
+		For example a string can be: size = len(A)
+		So the function should output size and A, since are the variables
+		used.
+		Is a recursive function since it will need to search for variables
+		in substrings of the input, in this case, it should look for variables
+		in the arguments of len(...) where eventually finds that A is the 
+		only variable name.
+		Returns the variables names.
+	"""
+
+	# Gets the variables names in the arguments of functions in string.
+	vars_as_args = search_args(string)
+
+	# Iterator that gets the indices where are functions in string.
+	iterator = re.finditer(FUNS_PATTERN, string)
+	slices = [(it.start(0), it.end(0)) for it in iterator]
+
+	variables = vars_as_args
+
+	# Base case where there are no functions definitions in string.
+	if slices == []:
+		vars_matches = re.findall(VARS_PATTERN, string)
+		variables += vars_matches
+	else:
+		start = 0
+		i = 0
+		while i < len(slices):
+			(ini, end) = slices[i]
+			if i == len(slices) - 1:
+				vars_matches = find_variables(string[start:ini])
+			else:
+				vars_matches = find_variables(string[start:ini])
+			start = end
+			variables += vars_matches
+			i += 1
+
+	return variables
+
+
+def search_args(string):
+	"""
+		Auxiliar function for find_variables defined above.
+		Looks for the substrings of the given string that
+		matches with the regex for function definitions (FUNS_PATTERN)
+		Looks for the variables names in the arguments of the 
+		function, using the find_variables function defined.
+		Returns an array of variables names.
+	"""
+
+	functions = re.findall(FUNS_PATTERN, string)
+	variables = []
+	for fun in functions:
+		args = re.findall(ARGS_PATTERN, fun)[0]
+		found_vars = find_variables(args)
+		if found_vars != None:
+			variables += found_vars
+
+	return variables
 
 def map_variables(program_name, composition):
 	"""
@@ -153,7 +215,8 @@ def map_variables(program_name, composition):
 	variables_mapping = {}
 	for line in file:
 		non_space_line = line.strip("\t ")
-		for var in re.findall(VARS_PATTERN, non_space_line):
+		line_variables = find_variables(line)
+		for var in line_variables:
 			var = var.strip("\n\t ")      						
 			if var not in PYTHON_KEYWORDS and var not in variables_mapping:
 				new_var = eval_composition(composition, var)
@@ -227,5 +290,3 @@ terminals = [all_upper,
 program_name = "example.py"
 change_variables(program_name, terminals, inputoutputs)
 print(" ~ Ver archivo new_%s" % program_name)
-
-
