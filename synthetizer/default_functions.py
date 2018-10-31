@@ -44,7 +44,6 @@ def all_lower(word):
 
     return word.lower()
 
-
 def first_upper(word):
     """
         Receives a word and returns the same word but with its first character in Upper
@@ -52,6 +51,12 @@ def first_upper(word):
 
     return word[0].upper() + word[1:]
 
+def first_lower(word):
+    """
+        Receives a word and returns the same word but with its first character in Lower
+    """
+
+    return word[0].lower() + word[1:]
 
 def to_upper_case(word):
     """
@@ -74,3 +79,29 @@ def to_upper_case(word):
 
     return new_word
 
+def remove_underscores(word):
+    """
+        Receives a word and returns the same word but without underscores
+    """
+
+    word_size = len(word)
+    new_word = ""
+    for i in range(word_size):
+        if not is_an_underscore(word[i]):
+            new_word += word[i]
+
+    return new_word
+
+def insert_first_underscore(word):
+    """
+        Receives a word and returns the same word with an initial underscore.
+    """
+
+    return "_" + word
+
+def insert_last_underscore(word):
+    """
+        Receives a word and returns the same word with an ending underscore.
+    """
+
+    return word + "_"
