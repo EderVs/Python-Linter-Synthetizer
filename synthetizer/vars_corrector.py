@@ -1,7 +1,7 @@
 import re
 from default_functions import *
 
-VARS_PATTERN  = re.compile(r"^_[a-zA-Z0-9_]*|^[a-z][_a-zA-Z0-9]*")
+VARS_PATTERN = re.compile(r"_[a-zA-Z0-9_]*|[a-zA-Z][_a-zA-Z0-9]*")
 
 PYTHON_KEYWORDS = { "False"    : 0,
 					"True"     : 0,
@@ -186,12 +186,21 @@ def change_variables(program_name, terminals, inputoutputs):
 	new_file = open(new_name, 'w')	
 	file = open(program_name, 'r')
 	for line in file:
-		new_line = line
-		for word in line.split(" "):
-			if word in mapping:
+		non_space_line = line.strip("\t \n")
+		for word in non_space_line.split(" "):
+			# word can be itself a variable name, or it can contain a
+			# variable name as substring. That's why this cases.
+			if word not in PYTHON_KEYWORDS and word not in mapping:
+				# Get the substring that matches with the regex for variables.
+				matches = re.findall(VARS_PATTERN, word)
+				for substr in matches:
+					if substr in mapping:
+						mapped = mapping[substr]
+						line = line.replace(substr, mapped)
+			elif word in mapping:
 				mapped = mapping[word]
-				new_line = new_line.replace(word, mapped)
-		new_file.write(new_line)
+				line = line.replace(word, mapped)
+		new_file.write(line)
 
 	file.close()
 	new_file.close()
