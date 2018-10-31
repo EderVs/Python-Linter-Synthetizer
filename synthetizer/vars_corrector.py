@@ -169,11 +169,9 @@ def find_variables(string):
 		start = 0
 		i = 0
 		while i < len(slices):
+			# Looks for variables in left and right of a function defintion.
 			(ini, end) = slices[i]
-			if i == len(slices) - 1:
-				vars_matches = find_variables(string[start:ini])
-			else:
-				vars_matches = find_variables(string[start:ini])
+			vars_matches = find_variables(string[start:ini])
 			start = end
 			variables += vars_matches
 			i += 1
