@@ -175,7 +175,7 @@ def find_variables(string):
 			start = end
 			variables += vars_matches
 			i += 1
-
+		variables += find_variables(string[start:])
 	return variables
 
 
@@ -288,3 +288,4 @@ terminals = [all_upper,
 program_name = "example.py"
 change_variables(program_name, terminals, inputoutputs)
 print(" ~ Ver archivo new_%s" % program_name)
+
