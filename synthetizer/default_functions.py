@@ -79,6 +79,24 @@ def to_upper_case(word):
 
     return new_word
 
+def to_underscore_case(word):
+    """
+        Receives a word and returns the same word but in undescore case
+    """
+
+    new_word = ""
+    
+    i = 0
+    while i < (len(word)):
+        if is_an_upper_char(word[i]):
+            new_word += '_'
+            new_word += word[i].lower()
+        else:
+            new_word += word[i]
+        i += 1
+
+    return new_word
+
 def remove_underscores(word):
     """
         Receives a word and returns the same word but without underscores

@@ -270,7 +270,7 @@ def change_variables(program_name, terminals, inputoutputs):
 # The program will search for a function that holds the constraints 
 # of these examples.
 inputoutputs = [["ejemplo_1", "_ejemplo_1_"], 
-				 ["este_es_el_ejemplo_2", "_este_es_el_ejemplo_2_"]]
+        			 ["este_es_el_ejemplo_2", "_este_es_el_ejemplo_2_"]]
 
 # The construction of the composed function is delimited by the 
 # the terminal functions that we can use, so if there's an update 
@@ -281,6 +281,7 @@ terminals = [all_upper,
 			 first_upper, 
 			 first_lower, 
 			 to_upper_case, 
+                         to_underscore_case,
 			 remove_underscores,
 			 insert_first_underscore,
 			 insert_last_underscore]
