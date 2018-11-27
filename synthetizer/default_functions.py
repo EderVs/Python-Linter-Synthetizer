@@ -123,3 +123,48 @@ def insert_last_underscore(word):
     """
 
     return word + "_"
+
+def add_space_begin_line_if_no_word(line):
+    """
+       Adds space in the beggining of a line if the begginig is a no word 
+    """
+
+    if line != "" and (line[0] == " " or line[0] == "\t"):
+        return " " + line
+    return line
+
+def add_tab_begin_line_if_no_word(line):
+    """
+        Adds tab in the beggining of a line if the begginig is a no word
+    """
+    
+    if line != "" and (line[0] == " " or line[0] == "\t"):
+        return "\t" + line
+    return line
+
+def change_beggining_to_tab(line):
+    """
+        Changes the no word at the begging to a tab
+    """
+
+    if line != "" and (line[0] == " " or line[0] == "\t"):
+        for i in range(len(line)):
+            if line[i] == " " or line[i] == "\t":
+                continue
+            return "\t" + line[i:]
+        return "\t"
+    return line
+
+def change_beggining_to_space(line):
+    """
+        Changes the no word at the begging to a space
+    """
+
+    if line != "" and (line[0] == " " or line[0] == "\t"):
+        for i in range(len(line)):
+            if line[i] == " " or line[i] == "\t":
+                continue
+            return " " + line[i:]
+        return " "
+    return line
+
